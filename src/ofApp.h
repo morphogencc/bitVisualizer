@@ -23,6 +23,8 @@ class ofApp : public ofBaseApp{
 		void dragEvent(ofDragInfo dragInfo);
 		void gotMessage(ofMessage msg);
 		
+		ofFbo mFbo;
+		ofPixels mPixels;
 		Invader* mInvader;
 		ofxVectorGraphics output;
 

@@ -6,9 +6,9 @@ class Invader {
 public:
 	Invader(unsigned long id, int numPixels, int width, ofxVectorGraphics* vg);
 	~Invader();
-	void draw();
+	void draw(int px, int py);
 protected:
-	void drawPixel(int pixelNumber);
+	void drawPixel(int px, int py, int pixelNumber);
 	unsigned long mId;
 	ofxVectorGraphics* mVG;
 	int mNumPixels;
