@@ -3,6 +3,7 @@
 #include "ofMain.h"
 #include "ofxVectorGraphics.h"
 #include "Invader.h"
+#include "Quadtree.h"
 
 class ofApp : public ofBaseApp{
 
@@ -27,5 +28,5 @@ class ofApp : public ofBaseApp{
 		ofPixels mPixels;
 		Invader* mInvader;
 		ofxVectorGraphics output;
-
+		std::shared_ptr<Quadtree> mQuadtree;
 };
