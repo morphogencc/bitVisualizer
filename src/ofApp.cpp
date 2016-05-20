@@ -36,6 +36,7 @@ void ofApp::setup() {
 		bool removeRectangle = false;
 		std::shared_ptr<ofRectangle> test_rect = std::make_shared<ofRectangle>(pos_x, pos_y, size, size);
 
+		// something below might now be right
 		for (auto child : mQuadtree->getNeighbors(test_rect)) {
 			bool intersects = child->intersects(*test_rect);
 			if (intersects) {
