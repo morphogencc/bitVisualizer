@@ -38,16 +38,22 @@ void Quadtree::remove(std::shared_ptr<ofRectangle> rect) {
 }
 
 std::vector<std::shared_ptr<ofRectangle>> Quadtree::getNeighbors(std::shared_ptr<ofRectangle> rect) {
-	// SOMETHING IN HERE DOESNT SEEM TO BE CORRECT
+	if (mCurrentDepth = mMaxDepth) {
+		return mChildren;
+	}
+
 	std::vector<std::shared_ptr<ofRectangle> > neighbors;
 
-	neighbors.insert(neighbors.end(), mChildren.begin(), mChildren.end());
+	if (neighbors.empty()) {
+		neighbors.insert(neighbors.end(), mChildren.begin(), mChildren.end());
+	}
 
 	std::shared_ptr<Quadtree> leaf = getSubtree(rect);
 
 	if (leaf != nullptr) {
 		std::vector<std::shared_ptr<ofRectangle> > children = leaf->getNeighbors(rect);
 		neighbors.insert(neighbors.end(), children.begin(), children.end());
+		return neighbors;
 	}
 
 	return neighbors;
