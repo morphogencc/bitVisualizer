@@ -48,10 +48,10 @@ std::vector<std::shared_ptr<ofRectangle>> Quadtree::getNeighbors(std::shared_ptr
 		neighbors.insert(neighbors.end(), mChildren.begin(), mChildren.end());
 	}
 
-	std::shared_ptr<Quadtree> leaf = getSubtree(rect);
+	std::shared_ptr<Quadtree> subtree = getSubtree(rect);
 
-	if (leaf != nullptr) {
-		std::vector<std::shared_ptr<ofRectangle> > children = leaf->getNeighbors(rect);
+	if (subtree != nullptr) {
+		std::vector<std::shared_ptr<ofRectangle> > children = subtree->getNeighbors(rect);
 		neighbors.insert(neighbors.end(), children.begin(), children.end());
 		return neighbors;
 	}
@@ -110,6 +110,7 @@ std::shared_ptr<Quadtree> Quadtree::getSubtree(std::shared_ptr<ofRectangle> rect
 	if (mSubtrees.empty()) {
 		return nullptr;
 	}
+
 	else {
 		ofPoint center = mBoundingRect->getCenter();
 		if (rect->getMinY() < center.y && rect->getMaxY() < center.y) {
@@ -118,22 +119,24 @@ std::shared_ptr<Quadtree> Quadtree::getSubtree(std::shared_ptr<ofRectangle> rect
 				// in the top-right quadrant
 				return mSubtrees[1];
 			}
-			else {
+			else if (rect->getMinX() < center.x && rect->getMaxX() < center.x) {
 				// in the top-left quadrant
 				return mSubtrees[0];
 			}
 		}
-		else {
+		else if (rect->getMinY() > center.y && rect->getMaxY() > center.y) {
 			if (rect->getMinX() > center.x && rect->getMaxX() > center.x) {
 				// in the bottom-right quadrant
 				return mSubtrees[3];
 			}
-			else {
+			else if (rect->getMinX() < center.x && rect->getMaxX() < center.x) {
 				// in the bottom-left quadrant
 				return mSubtrees[2];
 			}
 		}
 	}
+
+	return nullptr;
 }
 
 void Quadtree::split() {
