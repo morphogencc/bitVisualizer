@@ -25,6 +25,9 @@
     <ClCompile Include="src\Quadtree.cpp">
       <Filter>src</Filter>
     </ClCompile>
+    <ClCompile Include="src\Flower.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="src">
@@ -102,6 +105,9 @@
       <Filter>src</Filter>
     </ClInclude>
     <ClInclude Include="src\Quadtree.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Flower.h">
       <Filter>src</Filter>
     </ClInclude>
   </ItemGroup>

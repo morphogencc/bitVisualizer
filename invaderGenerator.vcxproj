@@ -171,6 +171,7 @@
     <PostBuildEvent />
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="src\Flower.cpp" />
     <ClCompile Include="src\Invader.cpp" />
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\ofApp.cpp" />
@@ -181,6 +182,7 @@
     <ClCompile Include="src\Quadtree.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\Flower.h" />
     <ClInclude Include="src\Invader.h" />
     <ClInclude Include="src\ofApp.h" />
     <ClInclude Include="..\..\..\addons\ofxColorPalette\src\ColorPalette.h" />

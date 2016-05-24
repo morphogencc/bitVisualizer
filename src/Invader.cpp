@@ -21,11 +21,11 @@ void Invader::draw(int px, int py) {
 	for (int pixelIndex = 0; pixelIndex < mNumBits; pixelIndex++) {
 		int currentPixelValue = (mId >> pixelIndex) & 1;
 		if (!currentPixelValue) {
-			mVG->setColor(0xFFFFFF);
+			ofSetColor(255);
 			//drawPixel(pixelIndex);
 		}
 		else {
-			mVG->setColor(0x000000);
+			ofSetColor(0);
 			drawPixel(px, py, pixelIndex);
 		}
 	}
@@ -37,10 +37,12 @@ void Invader::drawPixel(int px, int py, int pixelNumber) {
 	int y = (pixelNumber % mNumPixels) + 1;
 	if (x < std::floor(mNumPixels / 2.0)) {
 		// enforce bilateral symmetry by having one bit equal two pixels for certain ones.  std::floor makes this work for odd dimensionalities.
-		mVG->rect(px + (x + 1)*blockSize + 0.05*blockSize, py + y*blockSize + 0.05*blockSize, 0.9*blockSize, 0.9*blockSize);
-		mVG->rect(px + (mNumPixels-x)*blockSize + 0.05*blockSize, py + y*blockSize + 0.05*blockSize, 0.9*blockSize, 0.9*blockSize);
+		// mVG->rect(px + (x + 1)*blockSize + 0.05*blockSize, py + y*blockSize + 0.05*blockSize, 0.9*blockSize, 0.9*blockSize);
+		// mVG->rect(px + (mNumPixels-x)*blockSize + 0.05*blockSize, py + y*blockSize + 0.05*blockSize, 0.9*blockSize, 0.9*blockSize);
+		ofDrawRectangle(px + (x + 1)*blockSize + 0.05*blockSize, py + y*blockSize + 0.05*blockSize, 0.9*blockSize, 0.9*blockSize);
+		ofDrawRectangle(px + (mNumPixels - x)*blockSize + 0.05*blockSize, py + y*blockSize + 0.05*blockSize, 0.9*blockSize, 0.9*blockSize);
 	}
 	else {
-		mVG->rect(px + (x + 1)*blockSize + 0.05*blockSize, py + y*blockSize + 0.05*blockSize, 0.9*blockSize, 0.9*blockSize);
+		ofDrawRectangle(px + (x + 1)*blockSize + 0.05*blockSize, py + y*blockSize + 0.05*blockSize, 0.9*blockSize, 0.9*blockSize);
 	}
 }
