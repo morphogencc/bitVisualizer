@@ -29,7 +29,7 @@ void ofApp::setup() {
 
 //--------------------------------------------------------------
 void ofApp::update(){
-	if(mQuadtree->getAllChildren().size() < 500) {
+	if(mQuadtree->getAllChildren().size() < 250) {
 		int size = ofRandom(10, 100);
 		int pos_x = ofRandom(ofGetWidth());
 		int pos_y = ofRandom(ofGetHeight());
@@ -37,7 +37,6 @@ void ofApp::update(){
 		bool removeRectangle = false;
 		std::shared_ptr<ofRectangle> test_rect = std::make_shared<ofRectangle>(pos_x, pos_y, size, size);
 
-		// something below might now be right
 		for (auto child : mQuadtree->getNeighbors(test_rect)) {
 			bool intersects = child->intersects(*test_rect);
 			if (intersects) {
@@ -51,18 +50,14 @@ void ofApp::update(){
 
 		if (!removeRectangle) {
 			std::printf("Added a rectangle.\n");
-			mQuadtree->insert(std::make_shared<ofRectangle>(pos_x, pos_y, size, size));
+			mQuadtree->insert(test_rect);
 		}
-
 	}
 }
 
 //--------------------------------------------------------------
 void ofApp::draw(){
 	ofBackground(0);
-
-	ofSetColor(255);
-	ofFill();
 
 	for (auto child : mQuadtree->getAllChildren()) {
 		ofSetColor(255);
@@ -74,8 +69,8 @@ void ofApp::draw(){
 		ofDrawRectangle(*child);
 	}
 
-	ofSetColor(255);
-	//ofNoFill();
+	ofSetColor(128);
+	ofNoFill();
 	mQuadtree->draw();
 }
 

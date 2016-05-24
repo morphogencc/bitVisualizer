@@ -38,22 +38,19 @@ void Quadtree::remove(std::shared_ptr<ofRectangle> rect) {
 }
 
 std::vector<std::shared_ptr<ofRectangle>> Quadtree::getNeighbors(std::shared_ptr<ofRectangle> rect) {
-	if (mCurrentDepth = mMaxDepth) {
+	if (mCurrentDepth == mMaxDepth) {
 		return mChildren;
 	}
 
 	std::vector<std::shared_ptr<ofRectangle> > neighbors;
 
-	if (neighbors.empty()) {
-		neighbors.insert(neighbors.end(), mChildren.begin(), mChildren.end());
-	}
+	neighbors.insert(neighbors.end(), mChildren.begin(), mChildren.end());
 
-	std::shared_ptr<Quadtree> leaf = getSubtree(rect);
+	std::shared_ptr<Quadtree> subtree = getSubtree(rect);
 
-	if (leaf != nullptr) {
-		std::vector<std::shared_ptr<ofRectangle> > children = leaf->getNeighbors(rect);
+	if (subtree != nullptr) {
+		std::vector<std::shared_ptr<ofRectangle> > children = subtree->getNeighbors(rect);
 		neighbors.insert(neighbors.end(), children.begin(), children.end());
-		return neighbors;
 	}
 
 	return neighbors;
@@ -61,6 +58,9 @@ std::vector<std::shared_ptr<ofRectangle>> Quadtree::getNeighbors(std::shared_ptr
 
 void Quadtree::clear() {
 	mChildren.clear();
+	for (auto tree : mSubtrees) {
+		tree->clear();
+	}
 }
 
 std::vector<std::shared_ptr<ofRectangle>> Quadtree::getChildren() {
@@ -109,40 +109,42 @@ std::shared_ptr<Quadtree> Quadtree::getSubtree(std::shared_ptr<ofRectangle> rect
 	}
 	else {
 		ofPoint center = mBoundingRect->getCenter();
+		// CHANGE HOW THIS WORKS --> RECTANGLE _MUST_ BE ENTIRELY IN SUBTREE
 		if (rect->getMinY() < center.y && rect->getMaxY() < center.y) {
 			// in the top half
 			if (rect->getMinX() > center.x && rect->getMaxX() > center.x) {
 				// in the top-right quadrant
 				return mSubtrees[1];
 			}
-			else {
+			else if (rect->getMinX() < center.x && rect->getMaxX() < center.x) {
 				// in the top-left quadrant
 				return mSubtrees[0];
 			}
 		}
-		else {
+		else if(rect->getMinY() > center.y && rect->getMaxY() > center.y) {
 			if (rect->getMinX() > center.x && rect->getMaxX() > center.x) {
 				// in the bottom-right quadrant
 				return mSubtrees[3];
 			}
-			else {
+			else if ((rect->getMinX() < center.x && rect->getMaxX() < center.x)){
 				// in the bottom-left quadrant
 				return mSubtrees[2];
 			}
 		}
 	}
+	return nullptr;
 }
 
 void Quadtree::split() {
 	float new_width = mBoundingRect->getWidth() / 2.0;
 	float new_height = mBoundingRect->getHeight() / 2.0;
-	mSubtrees.push_back(std::make_shared<Quadtree>(mCurrentDepth + 1, std::make_shared<ofRectangle>(mBoundingRect->getMinX(), mBoundingRect->getMinY(), new_width, new_height), mMaxDepth, mMaxDepth));
-	mSubtrees.push_back(std::make_shared<Quadtree>(mCurrentDepth + 1, std::make_shared<ofRectangle>(mBoundingRect->getCenter().x, mBoundingRect->getMinY(), new_width, new_height), mMaxDepth, mMaxDepth));
-	mSubtrees.push_back(std::make_shared<Quadtree>(mCurrentDepth + 1, std::make_shared<ofRectangle>(mBoundingRect->getMinX(), mBoundingRect->getCenter().y, new_width, new_height), mMaxDepth, mMaxDepth));
-	mSubtrees.push_back(std::make_shared<Quadtree>(mCurrentDepth + 1, std::make_shared<ofRectangle>(mBoundingRect->getCenter().x, mBoundingRect->getCenter().y, new_width, new_height), mMaxDepth, mMaxDepth));
+	mSubtrees.push_back(std::make_shared<Quadtree>(mCurrentDepth + 1, std::make_shared<ofRectangle>(mBoundingRect->getMinX(), mBoundingRect->getMinY(), new_width, new_height), mMaxDepth, mMaxNumberOfChildren));
+	mSubtrees.push_back(std::make_shared<Quadtree>(mCurrentDepth + 1, std::make_shared<ofRectangle>(mBoundingRect->getCenter().x, mBoundingRect->getMinY(), new_width, new_height), mMaxDepth, mMaxNumberOfChildren));
+	mSubtrees.push_back(std::make_shared<Quadtree>(mCurrentDepth + 1, std::make_shared<ofRectangle>(mBoundingRect->getMinX(), mBoundingRect->getCenter().y, new_width, new_height), mMaxDepth, mMaxNumberOfChildren));
+	mSubtrees.push_back(std::make_shared<Quadtree>(mCurrentDepth + 1, std::make_shared<ofRectangle>(mBoundingRect->getCenter().x, mBoundingRect->getCenter().y, new_width, new_height), mMaxDepth, mMaxNumberOfChildren));
 
 	// save children, clear the tree, and re-insert them
-	std::vector<std::shared_ptr<ofRectangle> > temp_children = getChildren();
+	std::vector<std::shared_ptr<ofRectangle> > temp_children = getAllChildren();
 	clear();
 	for (auto child : temp_children) {
 		insert(child);
