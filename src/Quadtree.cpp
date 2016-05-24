@@ -61,6 +61,9 @@ std::vector<std::shared_ptr<ofRectangle>> Quadtree::getNeighbors(std::shared_ptr
 
 void Quadtree::clear() {
 	mChildren.clear();
+	for (auto subtree : mSubtrees) {
+		subtree->clear();
+	}
 }
 
 std::vector<std::shared_ptr<ofRectangle>> Quadtree::getChildren() {
@@ -136,10 +139,10 @@ std::shared_ptr<Quadtree> Quadtree::getSubtree(std::shared_ptr<ofRectangle> rect
 void Quadtree::split() {
 	float new_width = mBoundingRect->getWidth() / 2.0;
 	float new_height = mBoundingRect->getHeight() / 2.0;
-	mSubtrees.push_back(std::make_shared<Quadtree>(mCurrentDepth + 1, std::make_shared<ofRectangle>(mBoundingRect->getMinX(), mBoundingRect->getMinY(), new_width, new_height), mMaxDepth, mMaxDepth));
-	mSubtrees.push_back(std::make_shared<Quadtree>(mCurrentDepth + 1, std::make_shared<ofRectangle>(mBoundingRect->getCenter().x, mBoundingRect->getMinY(), new_width, new_height), mMaxDepth, mMaxDepth));
-	mSubtrees.push_back(std::make_shared<Quadtree>(mCurrentDepth + 1, std::make_shared<ofRectangle>(mBoundingRect->getMinX(), mBoundingRect->getCenter().y, new_width, new_height), mMaxDepth, mMaxDepth));
-	mSubtrees.push_back(std::make_shared<Quadtree>(mCurrentDepth + 1, std::make_shared<ofRectangle>(mBoundingRect->getCenter().x, mBoundingRect->getCenter().y, new_width, new_height), mMaxDepth, mMaxDepth));
+	mSubtrees.push_back(std::make_shared<Quadtree>(mCurrentDepth + 1, std::make_shared<ofRectangle>(mBoundingRect->getMinX(), mBoundingRect->getMinY(), new_width, new_height), mMaxDepth, mMaxNumberOfChildren));
+	mSubtrees.push_back(std::make_shared<Quadtree>(mCurrentDepth + 1, std::make_shared<ofRectangle>(mBoundingRect->getCenter().x, mBoundingRect->getMinY(), new_width, new_height), mMaxDepth, mMaxNumberOfChildren));
+	mSubtrees.push_back(std::make_shared<Quadtree>(mCurrentDepth + 1, std::make_shared<ofRectangle>(mBoundingRect->getMinX(), mBoundingRect->getCenter().y, new_width, new_height), mMaxDepth, mMaxNumberOfChildren));
+	mSubtrees.push_back(std::make_shared<Quadtree>(mCurrentDepth + 1, std::make_shared<ofRectangle>(mBoundingRect->getCenter().x, mBoundingRect->getCenter().y, new_width, new_height), mMaxDepth, mMaxNumberOfChildren));
 
 	// save children, clear the tree, and re-insert them
 	std::vector<std::shared_ptr<ofRectangle> > temp_children = getChildren();
