@@ -23,6 +23,7 @@ void ofApp::setup() {
 
 	std::printf("Saving complete!\n");
 	*/
+
 	mQuadtree = std::make_shared<Quadtree>(0, std::make_shared<ofRectangle>(0, 0, ofGetWidth(), ofGetHeight()));
 	mQuadtree->insert(std::make_shared<ofRectangle>(ofRandom(ofGetWidth()), ofRandom(ofGetHeight()), 25, 25));
 }
