@@ -38,7 +38,7 @@ void Quadtree::remove(std::shared_ptr<ofRectangle> rect) {
 }
 
 std::vector<std::shared_ptr<ofRectangle>> Quadtree::getNeighbors(std::shared_ptr<ofRectangle> rect) {
-	if (mCurrentDepth = mMaxDepth) {
+	if (mCurrentDepth == mMaxDepth) {
 		return mChildren;
 	}
 

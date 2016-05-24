@@ -51,7 +51,7 @@ void ofApp::update(){
 
 		if (!removeRectangle) {
 			std::printf("Added a rectangle.\n");
-			mQuadtree->insert(std::make_shared<ofRectangle>(pos_x, pos_y, size, size));
+			mQuadtree->insert(test_rect);
 		}
 
 	}
@@ -74,8 +74,8 @@ void ofApp::draw(){
 		ofDrawRectangle(*child);
 	}
 
-	ofSetColor(255);
-	//ofNoFill();
+	ofSetColor(128);
+	ofNoFill();
 	mQuadtree->draw();
 }
 
