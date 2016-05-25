@@ -44,16 +44,13 @@ std::vector<std::shared_ptr<ofRectangle>> Quadtree::getNeighbors(std::shared_ptr
 
 	std::vector<std::shared_ptr<ofRectangle> > neighbors;
 
-	if (neighbors.empty()) {
-		neighbors.insert(neighbors.end(), mChildren.begin(), mChildren.end());
-	}
+	neighbors.insert(neighbors.end(), mChildren.begin(), mChildren.end());
 
 	std::shared_ptr<Quadtree> subtree = getSubtree(rect);
 
 	if (subtree != nullptr) {
 		std::vector<std::shared_ptr<ofRectangle> > children = subtree->getNeighbors(rect);
 		neighbors.insert(neighbors.end(), children.begin(), children.end());
-		return neighbors;
 	}
 
 	return neighbors;
@@ -61,8 +58,13 @@ std::vector<std::shared_ptr<ofRectangle>> Quadtree::getNeighbors(std::shared_ptr
 
 void Quadtree::clear() {
 	mChildren.clear();
+<<<<<<< HEAD
 	for (auto subtree : mSubtrees) {
 		subtree->clear();
+=======
+	for (auto tree : mSubtrees) {
+		tree->clear();
+>>>>>>> 7d7f5eec20ac403051eb6700d9978837b9744630
 	}
 }
 
@@ -113,6 +115,7 @@ std::shared_ptr<Quadtree> Quadtree::getSubtree(std::shared_ptr<ofRectangle> rect
 
 	else {
 		ofPoint center = mBoundingRect->getCenter();
+		// CHANGE HOW THIS WORKS --> RECTANGLE _MUST_ BE ENTIRELY IN SUBTREE
 		if (rect->getMinY() < center.y && rect->getMaxY() < center.y) {
 			// in the top half
 			if (rect->getMinX() > center.x && rect->getMaxX() > center.x) {
@@ -124,18 +127,29 @@ std::shared_ptr<Quadtree> Quadtree::getSubtree(std::shared_ptr<ofRectangle> rect
 				return mSubtrees[0];
 			}
 		}
+<<<<<<< HEAD
 		else if (rect->getMinY() > center.y && rect->getMaxY() > center.y) {
+=======
+		else if(rect->getMinY() > center.y && rect->getMaxY() > center.y) {
+>>>>>>> 7d7f5eec20ac403051eb6700d9978837b9744630
 			if (rect->getMinX() > center.x && rect->getMaxX() > center.x) {
 				// in the bottom-right quadrant
 				return mSubtrees[3];
 			}
+<<<<<<< HEAD
 			else if (rect->getMinX() < center.x && rect->getMaxX() < center.x) {
+=======
+			else if ((rect->getMinX() < center.x && rect->getMaxX() < center.x)){
+>>>>>>> 7d7f5eec20ac403051eb6700d9978837b9744630
 				// in the bottom-left quadrant
 				return mSubtrees[2];
 			}
 		}
 	}
+<<<<<<< HEAD
 
+=======
+>>>>>>> 7d7f5eec20ac403051eb6700d9978837b9744630
 	return nullptr;
 }
 
@@ -148,7 +162,7 @@ void Quadtree::split() {
 	mSubtrees.push_back(std::make_shared<Quadtree>(mCurrentDepth + 1, std::make_shared<ofRectangle>(mBoundingRect->getCenter().x, mBoundingRect->getCenter().y, new_width, new_height), mMaxDepth, mMaxNumberOfChildren));
 
 	// save children, clear the tree, and re-insert them
-	std::vector<std::shared_ptr<ofRectangle> > temp_children = getChildren();
+	std::vector<std::shared_ptr<ofRectangle> > temp_children = getAllChildren();
 	clear();
 	for (auto child : temp_children) {
 		insert(child);

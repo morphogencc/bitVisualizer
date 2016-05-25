@@ -3,37 +3,74 @@
 
 //--------------------------------------------------------------
 void ofApp::setup() {
-	ofSetFrameRate(1.0);
-}
+	/*
+	output.beginEPS("invaders.eps", 0, 0, 5100, 3300);
+	output.fill();
 
-//--------------------------------------------------------------
-void ofApp::update(){
-}
+	uint16_t id = 0;
 
-//--------------------------------------------------------------
-void ofApp::draw(){
-	uint16_t id = 360;
-
-	ofBackground(255);
-	ofFill();
-
-	for (int i = 0; i < 8; i++) {
-		for (int j = 0; j < 6; j++) {
+	for (int i = 0; i < 51; i++) {
+		for (int j = 0; j < 33; j++) {
 			//std::printf("Generating invader of id %d\n", id);
-			mInvader = new Flower(ofRandom(0, 65535), 8, 100, &output);
-			mInvader->draw(i * 100, j * 100);
+			mInvader = new Invader(id, 5, 100, &output);
+			mInvader->draw(i*100, j*100);
 			id++;
 			delete mInvader;
 		}
 	}
 
-	ofImage img;
-	img.grabScreen(0, 0, ofGetWidth(), ofGetHeight());
+	output.endEPS();
 
-	std::ostringstream filepath;
-	filepath << ofGetFrameNum() << ".png";
+	std::printf("Saving complete!\n");
+	*/
 
-	ofSaveImage(img.getPixels(), filepath.str(), OF_IMAGE_QUALITY_BEST);
+	mQuadtree = std::make_shared<Quadtree>(0, std::make_shared<ofRectangle>(0, 0, ofGetWidth(), ofGetHeight()));
+	mQuadtree->insert(std::make_shared<ofRectangle>(ofRandom(ofGetWidth()), ofRandom(ofGetHeight()), 25, 25));
+}
+
+//--------------------------------------------------------------
+void ofApp::update(){
+	if(mQuadtree->getAllChildren().size() < 250) {
+		int size = ofRandom(10, 100);
+		int pos_x = ofRandom(ofGetWidth());
+		int pos_y = ofRandom(ofGetHeight());
+
+		bool removeRectangle = false;
+		std::shared_ptr<ofRectangle> test_rect = std::make_shared<ofRectangle>(pos_x, pos_y, size, size);
+
+		for (auto child : mQuadtree->getNeighbors(test_rect)) {
+			bool intersects = child->intersects(*test_rect);
+			if (intersects) {
+				std::printf("Intersects!\n");
+				removeRectangle = true;
+				break;
+			}
+			else {
+			}
+		}
+
+		if (!removeRectangle) {
+			std::printf("Added a rectangle.\n");
+			mQuadtree->insert(test_rect);
+		}
+	}
+}
+
+//--------------------------------------------------------------
+void ofApp::draw(){
+	for (auto child : mQuadtree->getAllChildren()) {
+		ofSetColor(255);
+		ofFill();
+		ofDrawRectangle(*child);
+
+		ofSetColor(0);
+		ofNoFill();
+		ofDrawRectangle(*child);
+	}
+
+	ofSetColor(128);
+	ofNoFill();
+	mQuadtree->draw();
 }
 
 //--------------------------------------------------------------

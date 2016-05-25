@@ -28,6 +28,7 @@
     <ClCompile Include="src\Flower.cpp">
       <Filter>src</Filter>
     </ClCompile>
+    <ClCompile Include="BitVisualizer.cpp" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="src">
@@ -110,6 +111,7 @@
     <ClInclude Include="src\Flower.h">
       <Filter>src</Filter>
     </ClInclude>
+    <ClInclude Include="BitVisualizer.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="icon.rc" />
