@@ -34,8 +34,6 @@ void Flower::drawPixel(int px, int py, int pixelNumber) {
 	int x = (pixelNumber / std::ceil(mNumPixels / 2.0));
 	int y = (pixelNumber % (int)std::ceil(mNumPixels / 2.0));
 
-	std::printf("Coordinates are %d, %d out of %d\n", x, y, mNumBits);
-
 	if (x < std::ceil(mNumPixels / 2.0) && y < std::ceil(mNumPixels / 2.0)) {
 		// enforce bilateral symmetry by having one bit equal two pixels for certain ones.  std::floor makes this work for odd dimensionalities.
 		ofDrawRectangle(px + (x + 1)*blockSize + 0.05*blockSize, py + (y+1)*blockSize + 0.05*blockSize, 0.9*blockSize, 0.9*blockSize);

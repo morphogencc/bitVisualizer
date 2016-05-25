@@ -26,6 +26,14 @@ void ofApp::draw(){
 			delete mInvader;
 		}
 	}
+
+	ofImage img;
+	img.grabScreen(0, 0, ofGetWidth(), ofGetHeight());
+
+	std::ostringstream filepath;
+	filepath << ofGetFrameNum() << ".png";
+
+	ofSaveImage(img.getPixels(), filepath.str(), OF_IMAGE_QUALITY_BEST);
 }
 
 //--------------------------------------------------------------
